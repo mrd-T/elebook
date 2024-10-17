@@ -102,8 +102,8 @@ BPlusTree.prototype.init = function(am, w, h)
 	this.yPosOfNextLabel = 200;
     var insertedValue;
 	this.implementAction(this.insertElement.bind(this),insertedValue);
-    this.cmd("CreateLabel", 1100, "索引查找次数：", MESSAGE_X+1000, MESSAGE_Y, 0);
-    this.cmd("CreateLabel", 1101, "全表扫描查找次数：", MESSAGE_X, MESSAGE_Y+50, 0);
+    this.cmd("CreateLabel", 1100, "\u7d22\u5f15\u67e5\u627e\u6b21\u6570\uff1a", MESSAGE_X+1000, MESSAGE_Y, 0);
+    this.cmd("CreateLabel", 1101, "\u8868\u626b\u63cf\u67e5\u627e\u6b21\u6570\uff1a", MESSAGE_X, MESSAGE_Y+50, 0);
     
 }
 BPlusTree.FOREGROUND_COLOR = "#000055"
@@ -181,7 +181,7 @@ BPlusTree.prototype.findRow = function (x) {
 		}
 		r_starting_id+=2;
     }
-    this.cmd("SetText", 1101, "全表扫描查找次数："+cnt);
+    this.cmd("SetText", 1101, "\u5168\u8868\u626b\u63cf\u67e5\u627e\u6b21\u6570\uff1a"+cnt);
     // this.cmd("CreateLabel", this.messageID+1002, "123", MESSAGE_X+50, MESSAGE_Y+50, 0);
     
 }
@@ -203,7 +203,7 @@ BPlusTree.prototype.findRow0= function (x) {
 		}
 		r_starting_id+=2;
     }
-    // this.cmd("CreateLabel", 1102, "全表扫描查找次数：", MESSAGE_X+50, MESSAGE_Y+50, 0);
+    // this.cmd("CreateLabel", 1102, "\u5168\u8868\u626b\u63cf\u67e5\u627e\u6b21\u6570\uff1a", MESSAGE_X+50, MESSAGE_Y+50, 0);
     // this.cmd("CreateLabel", this.messageID+1002, "123", MESSAGE_X+50, MESSAGE_Y+50, 0);
     
 }
@@ -656,7 +656,7 @@ BPlusTree.prototype.findInTree = function(tree, val)
 			{
 				this.cmd("SetHighlight", tree.graphicID, 0);
 				this.cmd("SetText", this.messageID, "Element " + val + " is not in the table");
-                this.cmd("SetText",1100,"索引查找次数："+cnt1);
+                this.cmd("SetText",1100,"\u7d22\u5f15\u67e5\u627e\u6b21\u6570\uff1a"+cnt1);
                 cnt1=0;
 			}
 		}
@@ -674,7 +674,7 @@ BPlusTree.prototype.findInTree = function(tree, val)
 			{
 				this.cmd("SetHighlight", tree.graphicID, 0);
 				this.cmd("SetText", this.messageID, "Element " + val + " is not in the table");
-                this.cmd("SetText",1100,"索引查找次数："+cnt1);
+                this.cmd("SetText",1100,"\u7d22\u5f15\u67e5\u627e\u6b21\u6570\uff1a"+cnt1);
                 cnt1=0;
 			}
 		}
@@ -693,7 +693,7 @@ BPlusTree.prototype.findInTree = function(tree, val)
 				// var r_starting_id=410000;
 				// this.highLightRow([r_starting_id+(val-2011)*2,r_starting_id+(val-2011)*2+1],1);
 				// this.cmd("Step");
-                this.cmd("SetText",1100,"索引查找次数："+cnt1);
+                this.cmd("SetText",1100,"\u7d22\u5f15\u67e5\u627e\u6b21\u6570\uff1a"+cnt1);
                 cnt1=0
 				// this.highLightRow([r_starting_id+(val-2011)*2,r_starting_id+(val-2011)*2+1],0);
 			}
@@ -710,7 +710,7 @@ BPlusTree.prototype.findInTree = function(tree, val)
 	else
 	{
 		this.cmd("SetText", this.messageID, "Element " + val + " is not in the table");
-        this.cmd("SetText",1100,"索引查找次数："+cnt1);
+        this.cmd("SetText",1100,"\u7d22\u5f15\u67e5\u627e\u6b21\u6570\uff1a"+cnt1);
                 cnt1=0;
 	}
 }
@@ -723,13 +723,13 @@ BPlusTree.prototype.insertElement = function()
 	for(var i=1;i<R_Table.length+1;i++)
 	{
 		insertedValue=R_Table[i-1].name;
-		this.highLightRow([r_starting_id,r_starting_id+1],1);
+		// this.highLightRow([r_starting_id,r_starting_id+1],1);
 		// this.insertElement(cur_row)
 		// this.implementAction(this.insertElement.bind(this),cur_row[0]);
 		
 
 	this.cmd("SetText", this.messageID, "Inserting " + insertedValue);
-	this.cmd("Step");
+	// this.cmd("Step");
 	
 	if (this.treeRoot == null)
 	{
@@ -762,7 +762,7 @@ BPlusTree.prototype.insertElement = function()
 BPlusTree.prototype.insert  = function(tree, insertValue)
 {
 	this.cmd("SetHighlight", tree.graphicID, 1);
-	this.cmd("Step");
+	// this.cmd("Step");
 	if (tree.isLeaf)
 	{
 		this.cmd("SetText", this.messageID, "Inserting " + insertValue + ".  Inserting into a leaf");
@@ -831,7 +831,7 @@ BPlusTree.prototype.split = function(tree)
 {
 	this.cmd("SetText", this.messageID, "Node now contains too many keys.  Splittig ...");
 	this.cmd("SetHighlight", tree.graphicID, 1);
-	this.cmd("Step");
+	// this.cmd("Step");
 	this.cmd("SetHighlight", tree.graphicID, 0);
 	var rightNode = new BTreeNode(this.nextIndex++, tree.x + 100, tree.y);
 	
@@ -964,7 +964,7 @@ BPlusTree.prototype.split = function(tree)
 			"", // Label
 			parentIndex + 1);
 		this.resizeTree();
-		this.cmd("Step")
+		// this.cmd("Step")
 		this.cmd("Delete", this.moveLabel1ID);				
 		this.cmd("SetText", currentParent.graphicID, risingNode, parentIndex);
 		return tree.parent;
@@ -1162,7 +1162,7 @@ BPlusTree.prototype.mergeRight = function(tree)
 	this.cmd("SetHighlight", parentNode.graphicID, 1);
 	this.cmd("SetHighlight", rightSib.graphicID, 1);
 	
-	this.cmd("Step");
+	// this.cmd("Step");
 	if (tree.isLeaf)
 	{
 		this.cmd("SetNumElements", tree.graphicID, tree.numKeys + rightSib.numKeys);
@@ -1253,7 +1253,7 @@ BPlusTree.prototype.mergeRight = function(tree)
 	if (!tree.isLeaf)
 	{
 		this.cmd("Move", this.moveLabel1ID, this.getLabelX(tree, fromParentIndex), tree.y);
-		this.cmd("Step");
+		// this.cmd("Step");
 		this.cmd("Delete", this.moveLabel1ID);
 		this.cmd("SetText", tree.graphicID, tree.keys[fromParentIndex], fromParentIndex);
 	}
@@ -1315,7 +1315,7 @@ BPlusTree.prototype.stealFromRight = function(tree, parentIndex)
 	this.cmd("Move", this.moveLabel1ID, this.getLabelX(parentNode, parentIndex),  parentNode.y);
 	this.cmd("Move", this.moveLabel2ID, this.getLabelX(tree, tree.numKeys - 1), tree.y);
 	
-	this.cmd("Step")
+	// this.cmd("Step")
 	this.cmd("Delete", this.moveLabel1ID);
 	this.cmd("Delete", this.moveLabel2ID);
 	
@@ -1436,7 +1436,7 @@ BPlusTree.prototype.stealFromRight = function(tree, parentIndex)
 	this.cmd("Move", this.moveLabel1ID, this.getLabelX(parentNode, parentIndex - 1),  parentNode.y);
 	this.cmd("Move", this.moveLabel2ID, this.getLabelX(tree, 0), tree.y);
 	
-	this.cmd("Step")
+	// this.cmd("Step")
 	this.cmd("Delete", this.moveLabel1ID);
 	this.cmd("Delete", this.moveLabel2ID);
 	

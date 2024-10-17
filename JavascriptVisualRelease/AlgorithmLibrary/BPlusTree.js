@@ -125,9 +125,9 @@ let R_Table = [
 	{ id: 2014, name: "Diana" },
 	{ id: 2015, name: "faker" },
 	{ id: 2016, name: "zeus" },
-	// { id: 2017, name: "oner" },
-	// { id: 2018, name: "on" },
-	// { id: 2019, name: "elk" }
+	{ id: 2017, name: "oner" },
+	{ id: 2018, name: "on" },
+	{ id: 2019, name: "elk" }
 ]
 BPlusTree.prototype.deleRectangle= function(id) {
     this.cmd("Delete", id);
@@ -235,9 +235,9 @@ BPlusTree.prototype.addControls =  function()
 	// this.deleteField.onkeydown = this.returnSubmit(this.deleteField,  this.deleteCallback.bind(this), 4);
 	// this.controls.push(this.deleteField);
 	
-	this.deleteButton = addControlToAlgorithmBar("Button", "Delete");
-	this.deleteButton.onclick = this.deleteCallback.bind(this);
-	this.controls.push(this.deleteButton);
+	// this.deleteButton = addControlToAlgorithmBar("Button", "Delete");
+	// this.deleteButton.onclick = this.deleteCallback.bind(this);
+	// this.controls.push(this.deleteButton);
 	
 	// this.findField = addControlToAlgorithmBar("Text", "");
 	// this.findField.onkeydown = this.returnSubmit(this.findField,  this.findCallback.bind(this), 4);
@@ -646,9 +646,9 @@ BPlusTree.prototype.insertElement = function(insertedValue)
 {
 	var r_starting_id=410000;
 	this.commands = new Array();
-	for(var i=1;i<7;i++)
+	for(var i=1;i<R_Table.length+1;i++)
 	{
-		insertedValue=R_Table[i-1].id;
+		insertedValue=R_Table[i-1].name;
 		this.highLightRow([r_starting_id,r_starting_id+1],1);
 		// this.insertElement(cur_row)
 		// this.implementAction(this.insertElement.bind(this),cur_row[0]);
@@ -808,7 +808,7 @@ BPlusTree.prototype.split = function(tree)
 		rightSplit = this.split_index;
 		rightNode.next = tree.next;
 		tree.next = rightNode;
-	}
+	}	
 	else
 	{
 		rightSplit = this.split_index + 1;
