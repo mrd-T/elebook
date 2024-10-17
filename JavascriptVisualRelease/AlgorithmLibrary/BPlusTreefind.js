@@ -70,7 +70,7 @@ BPlusTree.prototype.init = function(am, w, h)
 	
 	this.preemptiveSplit = false
 	
-	this.starting_x = w *2 / 4;
+	this.starting_x = w *2 / 3;
 
 
 	this.addControls();
@@ -84,7 +84,7 @@ BPlusTree.prototype.init = function(am, w, h)
 	
 	
 	
-	this.cmd("CreateLabel", this.messageID+100, "123", MESSAGE_X+100, MESSAGE_Y+1000, 0);
+	// this.cmd("CreateLabel", this.messageID+100, "123", MESSAGE_X+100, MESSAGE_Y+1000, 0);
 	this.messageID = this.nextIndex++;
 	this.cmd("CreateLabel", this.messageID, "", MESSAGE_X, MESSAGE_Y, 0);
 	this.moveLabel1ID = this.nextIndex++;
@@ -100,7 +100,11 @@ BPlusTree.prototype.init = function(am, w, h)
 	
 	this.xPosOfNextLabel = 100;
 	this.yPosOfNextLabel = 200;
-
+    var insertedValue;
+	this.implementAction(this.insertElement.bind(this),insertedValue);
+    this.cmd("CreateLabel", 1100, "索引查找次数：", MESSAGE_X+1000, MESSAGE_Y, 0);
+    this.cmd("CreateLabel", 1101, "全表扫描查找次数：", MESSAGE_X, MESSAGE_Y+50, 0);
+    
 }
 BPlusTree.FOREGROUND_COLOR = "#000055"
 BPlusTree.BACKGROUND_COLOR = "#AAAAFF"
@@ -125,9 +129,9 @@ let R_Table = [
 	{ id: 2014, name: "Diana" },
 	{ id: 2015, name: "faker" },
 	{ id: 2016, name: "zeus" },
-	// { id: 2017, name: "oner" },
-	// { id: 2018, name: "on" },
-	// { id: 2019, name: "elk" }
+	{ id: 2017, name: "oner" },
+	{ id: 2018, name: "on" },
+	{ id: 2019, name: "elk" }
 ]
 BPlusTree.prototype.deleRectangle= function(id) {
     this.cmd("Delete", id);
@@ -161,19 +165,46 @@ BPlusTree.prototype.deleteRow = function () {
 BPlusTree.prototype.findRow = function (x) {
 	let r_starting_id = 410000
 	var cnt=0;
+    console.log("213");
 	for (let i = 0; i < R_Table.length; ++i) {
 		// if(i==x) continue;
+        this.highLightRow([r_starting_id,r_starting_id+1],1);
+        this.cmd("step");
+        this.highLightRow([r_starting_id,r_starting_id+1],0);
+        cnt++;
 		if(R_Table[i].id==x)
 			{
-			console.log(R_Table[i].id+"!!");
-			this.highLightRow([r_starting_id,r_starting_id+1],1);
-			this.cmd("step");
-			this.highLightRow([r_starting_id,r_starting_id+1],0);
-			// cnt++;
+			// console.log(R_Table[i].id+"!!");
+			break;
 			
 		}
 		r_starting_id+=2;
     }
+    this.cmd("CreateLabel", 1102, "全表扫描查找次数："+cnt, MESSAGE_X, MESSAGE_Y+50, 0);
+    // this.cmd("CreateLabel", this.messageID+1002, "123", MESSAGE_X+50, MESSAGE_Y+50, 0);
+    
+}
+BPlusTree.prototype.findRow0= function (x) {
+	let r_starting_id = 410000
+	var cnt=0;
+    console.log("213");
+	for (let i = 0; i < R_Table.length; ++i) {
+        // if(i==x) continue;
+        cnt++;
+		if(R_Table[i].id==x)
+			{
+                this.highLightRow([r_starting_id,r_starting_id+1],1);
+                this.cmd("step");
+                this.highLightRow([r_starting_id,r_starting_id+1],0);
+			// console.log(R_Table[i].id+"!!");
+			break;
+			
+		}
+		r_starting_id+=2;
+    }
+    // this.cmd("CreateLabel", 1102, "全表扫描查找次数：", MESSAGE_X+50, MESSAGE_Y+50, 0);
+    // this.cmd("CreateLabel", this.messageID+1002, "123", MESSAGE_X+50, MESSAGE_Y+50, 0);
+    
 }
 BPlusTree.prototype.restart = function (x,r_starting_id) {
 	BPlusTree.TABLE_R_X = 50;
@@ -227,25 +258,25 @@ BPlusTree.prototype.addControls =  function()
 	// thie.cmd("CreateRectangle",123456,"12345",100,100,100,100);
 	// this.cmd("CreateRectangle", 1234567, "123456\n1234", 100, 100, 50, 50, "center", "center", "#FFFFFF", "#000000");
 	
-	this.insertButton = addControlToAlgorithmBar("Button", "Insert");
-	this.insertButton.onclick = this.insertCallback.bind(this);
-	this.controls.push(this.insertButton);
+	// this.insertButton = addControlToAlgorithmBar("Button", "Insert");
+	// this.insertButton.onclick = this.insertCallback.bind(this);
+	// this.controls.push(this.insertButton);
 	
 	// this.deleteField = addControlToAlgorithmBar("Text", "");
 	// this.deleteField.onkeydown = this.returnSubmit(this.deleteField,  this.deleteCallback.bind(this), 4);
 	// this.controls.push(this.deleteField);
 	
-	this.deleteButton = addControlToAlgorithmBar("Button", "Delete");
-	this.deleteButton.onclick = this.deleteCallback.bind(this);
-	this.controls.push(this.deleteButton);
+	// this.deleteButton = addControlToAlgorithmBar("Button", "Delete");
+	// this.deleteButton.onclick = this.deleteCallback.bind(this);
+	// this.controls.push(this.deleteButton);
 	
-	// this.findField = addControlToAlgorithmBar("Text", "");
-	// this.findField.onkeydown = this.returnSubmit(this.findField,  this.findCallback.bind(this), 4);
-	// this.controls.push(this.findField);
+	this.findField = addControlToAlgorithmBar("Text", "");
+	this.findField.onkeydown = this.returnSubmit(this.findField,  this.findCallback.bind(this), 4);
+	this.controls.push(this.findField);
 	
-	// this.findButton = addControlToAlgorithmBar("Button", "Find");
-	// this.findButton.onclick = this.findCallback.bind(this);
-	// this.controls.push(this.findButton);
+	this.findButton = addControlToAlgorithmBar("Button", "Find");
+	this.findButton.onclick = this.findCallback.bind(this);
+	this.controls.push(this.findButton);
 	
 	// this.printButton = addControlToAlgorithmBar("Button", "Print");
 	// this.printButton.onclick = this.printCallback.bind(this);
@@ -270,10 +301,8 @@ BPlusTree.prototype.addControls =  function()
 		this.maxDegreeRadioButtons[i].onclick = this.maxDegreeChangedHandler.bind(this,i+MIN_MAX_DEGREE);
 	}
 	
-	
 //	this.premptiveSplitBox = addCheckboxToAlgorithmBar("Preemtive Split / Merge (Even max degree only)");
 //	this.premptiveSplitBox.onclick = this.premtiveSplitCallback.bind(this);
-	
 	
 	// Other buttons ...
 	
@@ -556,23 +585,24 @@ BPlusTree.prototype.findCallback = function(event)
 	this.findField.value = "";
 	this.implementAction(this.findElement.bind(this),findValue);						
 }
-
 BPlusTree.prototype.findElement = function(findValue)
 {
 	this.commands = new Array();
-	
+
 	this.cmd("SetText", this.messageID, "Finding " + findValue);
 	this.findInTree(this.treeRoot, findValue);
-	
+	// this.findintext(findValue);
+    this.findRow(findValue);
 	return this.commands;
 }
 
 
-
+var cnt1=0;
 BPlusTree.prototype.findInTree = function(tree, val)
 {
 	if (tree != null)
 	{
+        cnt1++;
 		this.cmd("SetHighlight", tree.graphicID, 1);
 		this.cmd("Step");
 		var i;
@@ -590,7 +620,9 @@ BPlusTree.prototype.findInTree = function(tree, val)
 			else
 			{
 				this.cmd("SetHighlight", tree.graphicID, 0);
-				this.cmd("SetText", this.messageID, "Element " + val + " is not in the tree");
+				this.cmd("SetText", this.messageID, "Element " + val + " is not in the table");
+                this.cmd("SetText",1100,"索引查找次数："+cnt1);
+                cnt1=0;
 			}
 		}
 		else if (tree.keys[i] > val)
@@ -606,7 +638,9 @@ BPlusTree.prototype.findInTree = function(tree, val)
 			else
 			{
 				this.cmd("SetHighlight", tree.graphicID, 0);
-				this.cmd("SetText", this.messageID, "Element " + val + " is not in the tree");
+				this.cmd("SetText", this.messageID, "Element " + val + " is not in the table");
+                this.cmd("SetText",1100,"索引查找次数："+cnt1);
+                cnt1=0;
 			}
 		}
 		else
@@ -620,10 +654,12 @@ BPlusTree.prototype.findInTree = function(tree, val)
 				this.cmd("SetHighlight", tree.graphicID, 0);
 				
 				this.cmd("Step");
-				this.findRow(val);
+				this.findRow0(val);
 				// var r_starting_id=410000;
 				// this.highLightRow([r_starting_id+(val-2011)*2,r_starting_id+(val-2011)*2+1],1);
 				// this.cmd("Step");
+                this.cmd("SetText",1100,"索引查找次数："+cnt1);
+                cnt1=0
 				// this.highLightRow([r_starting_id+(val-2011)*2,r_starting_id+(val-2011)*2+1],0);
 			}
 			else
@@ -638,17 +674,20 @@ BPlusTree.prototype.findInTree = function(tree, val)
 	}
 	else
 	{
-		this.cmd("SetText", this.messageID, "Element " + val + " is not in the tree");
+		this.cmd("SetText", this.messageID, "Element " + val + " is not in the table");
+        this.cmd("SetText",1100,"索引查找次数："+cnt1);
+                cnt1=0;
 	}
 }
 
-BPlusTree.prototype.insertElement = function(insertedValue)
+BPlusTree.prototype.insertElement = function()
 {
+    var insertedValue;
 	var r_starting_id=410000;
 	this.commands = new Array();
-	for(var i=1;i<7;i++)
+	for(var i=1;i<R_Table.length+1;i++)
 	{
-		insertedValue=R_Table[i-1].id;
+		insertedValue=R_Table[i-1].name;
 		this.highLightRow([r_starting_id,r_starting_id+1],1);
 		// this.insertElement(cur_row)
 		// this.implementAction(this.insertElement.bind(this),cur_row[0]);
@@ -728,7 +767,7 @@ BPlusTree.prototype.insert  = function(tree, insertValue)
 			findIndex++;					
 		}				
 		this.cmd("SetEdgeHighlight", tree.graphicID, tree.children[findIndex].graphicID, 1);
-		this.cmd("Step");
+		// this.cmd("Step");
 		this.cmd("SetEdgeHighlight", tree.graphicID, tree.children[findIndex].graphicID, 0);
 		this.cmd("SetHighlight", tree.graphicID, 0);
 		this.insert(tree.children[findIndex], insertValue);				

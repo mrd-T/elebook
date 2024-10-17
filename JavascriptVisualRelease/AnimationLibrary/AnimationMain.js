@@ -395,6 +395,8 @@ function initCanvas()
         {
 	    reorderSibling(document.getElementById('canvas'), document.getElementById('generalAnimationControlSection'));
 	}
+	width=2000;
+	height=1000;
 
 	canvas.width = width;
 	canvas.height = height;
