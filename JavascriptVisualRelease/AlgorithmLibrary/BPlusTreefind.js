@@ -29,8 +29,8 @@ var PRINT_VERTICAL_GAP = 20;
 var PRINT_MAX = 990;
 var PRINT_HORIZONTAL_GAP = 50;
 
-var MIN_MAX_DEGREE = 3;
-var MAX_MAX_DEGREE = 3;
+var MIN_MAX_DEGREE = 4;
+var MAX_MAX_DEGREE = 4;
 
 var HEIGHT_DELTA  = 50;
 var NODE_SPACING = 50; 
@@ -172,7 +172,7 @@ BPlusTree.prototype.findRow = function (x) {
         this.cmd("step");
         this.highLightRow([r_starting_id,r_starting_id+1],0);
         cnt++;
-		if(R_Table[i].id==x)
+		if(R_Table[i].name==x)
 			{
 			// console.log(R_Table[i].id+"!!");
 			break;
@@ -180,7 +180,7 @@ BPlusTree.prototype.findRow = function (x) {
 		}
 		r_starting_id+=2;
     }
-    this.cmd("CreateLabel", 1102, "全表扫描查找次数："+cnt, MESSAGE_X, MESSAGE_Y+50, 0);
+    this.cmd("SetText", 1101, "全表扫描查找次数："+cnt);
     // this.cmd("CreateLabel", this.messageID+1002, "123", MESSAGE_X+50, MESSAGE_Y+50, 0);
     
 }
@@ -191,7 +191,7 @@ BPlusTree.prototype.findRow0= function (x) {
 	for (let i = 0; i < R_Table.length; ++i) {
         // if(i==x) continue;
         cnt++;
-		if(R_Table[i].id==x)
+		if(R_Table[i].name==x)
 			{
                 this.highLightRow([r_starting_id,r_starting_id+1],1);
                 this.cmd("step");
@@ -270,13 +270,19 @@ BPlusTree.prototype.addControls =  function()
 	// this.deleteButton.onclick = this.deleteCallback.bind(this);
 	// this.controls.push(this.deleteButton);
 	
-	this.findField = addControlToAlgorithmBar("Text", "");
-	this.findField.onkeydown = this.returnSubmit(this.findField,  this.findCallback.bind(this), 4);
-	this.controls.push(this.findField);
 	
-	this.findButton = addControlToAlgorithmBar("Button", "Find");
+	this.findField = addControlToAlgorithmBar("Text", "");
+	this.findField.onkeydown = this.returnSubmit(this.findField,  this.findCallback.bind(this), 10);
+	this.controls.push(this.findField);
+	this.findButton = addControlToAlgorithmBar("Button", "IndexFind");
 	this.findButton.onclick = this.findCallback.bind(this);
 	this.controls.push(this.findButton);
+	// this.findField1= addControlToAlgorithmBar("Text", "");
+	// this.findField1.onkeydown = this.returnSubmit(this.findField1,  this.findCall1back.bind(this), 10);
+	// this.controls.push(this.findField1);
+	// this.findButton = addControlToAlgorithmBar("Button", "TableFind");
+	// this.findButton.onclick = this.findCallback.bind(this);
+	// this.controls.push(this.findButton);
 	
 	// this.printButton = addControlToAlgorithmBar("Button", "Print");
 	// this.printButton.onclick = this.printCallback.bind(this);
