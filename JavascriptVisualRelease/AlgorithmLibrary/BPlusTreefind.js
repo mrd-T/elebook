@@ -175,6 +175,7 @@ BPlusTree.prototype.findRow = function (x) {
 		if(R_Table[i].name==x)
 			{
 			// console.log(R_Table[i].id+"!!");
+			this.cmd("SetText", this.messageID, "Element " + x + " found");
 			break;
 			
 		}
@@ -277,12 +278,12 @@ BPlusTree.prototype.addControls =  function()
 	this.findButton = addControlToAlgorithmBar("Button", "IndexFind");
 	this.findButton.onclick = this.findCallback.bind(this);
 	this.controls.push(this.findButton);
-	// this.findField1= addControlToAlgorithmBar("Text", "");
-	// this.findField1.onkeydown = this.returnSubmit(this.findField1,  this.findCall1back.bind(this), 10);
-	// this.controls.push(this.findField1);
-	// this.findButton = addControlToAlgorithmBar("Button", "TableFind");
-	// this.findButton.onclick = this.findCallback.bind(this);
-	// this.controls.push(this.findButton);
+	this.findField1= addControlToAlgorithmBar("Text", "");
+	this.findField1.onkeydown = this.returnSubmit(this.findField1,  this.find1Callback.bind(this), 10);
+	this.controls.push(this.findField1);
+	this.findButton1 = addControlToAlgorithmBar("Button", "TableFind");
+	this.findButton1.onclick = this.find1Callback.bind(this);
+	this.controls.push(this.findButton1);
 	
 	// this.printButton = addControlToAlgorithmBar("Button", "Print");
 	// this.printButton.onclick = this.printCallback.bind(this);
@@ -591,6 +592,25 @@ BPlusTree.prototype.findCallback = function(event)
 	this.findField.value = "";
 	this.implementAction(this.findElement.bind(this),findValue);						
 }
+BPlusTree.prototype.find1Callback = function(event)
+{
+	var findValue;
+	findValue = this.normalizeNumber(this.findField1.value, 4);
+	// console.log(findValue);
+	this.findField.value = "";
+	this.implementAction(this.findElement1.bind(this),findValue);						
+}
+BPlusTree.prototype.findElement1 = function(findValue)
+{
+	this.commands = new Array();
+
+	this.cmd("SetText", this.messageID, "Finding " + findValue);
+	// this.findInTree(this.treeRoot, findValue);
+	// this.findintext(findValue);
+	
+    this.findRow(findValue);
+	return this.commands;
+}
 BPlusTree.prototype.findElement = function(findValue)
 {
 	this.commands = new Array();
@@ -598,10 +618,19 @@ BPlusTree.prototype.findElement = function(findValue)
 	this.cmd("SetText", this.messageID, "Finding " + findValue);
 	this.findInTree(this.treeRoot, findValue);
 	// this.findintext(findValue);
+    // this.findRow(findValue);
+	return this.commands;
+}
+BPlusTree.prototype.find1Element = function(findValue)
+{
+	this.commands = new Array();
+
+	this.cmd("SetText", this.messageID, "Finding " + findValue);
+	// this.findInTree(this.treeRoot, findValue);
+	// this.findintext(findValue);
     this.findRow(findValue);
 	return this.commands;
 }
-
 
 var cnt1=0;
 BPlusTree.prototype.findInTree = function(tree, val)
